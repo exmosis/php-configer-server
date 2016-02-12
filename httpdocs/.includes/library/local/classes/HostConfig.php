@@ -43,7 +43,11 @@ class HostConfig {
                             )
                         );
                         
-        print_r($host_info);
+        $host_info = $host_info[0];
+        
+        $this->id = $host_info['host_id'];
+        $this->token = $host_info['host_token'];
+        $this->parent_host_id = $host_info['parent_host_id'];
     }
 
     public function getHostConfig() {
