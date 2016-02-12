@@ -6,23 +6,19 @@ class MySqlConnection {
 
     public $link = null;
 
-    public function __construct($db_host,
-                                   $db_user,
-                                   $db_pass,
-                                   $db_name,
-                                   $db_port = 3306) {
-    
+    public function __construct(DatabaseConfig $db_config) {
+
         $this->link = new medoo(array(
             // required
             'database_type' => 'mysql',
-            'database_name' => $db_name,
-            'server' => $db_host,
-            'username' => $db_user,
-            'password' => $db_pass,
+            'database_name' => $db_config->getDb(),
+            'server' => $db_config->getHost(),
+            'username' => $db_config->getUser(),
+            'password' => $db_config->getPass(),
             'charset' => 'utf8',
          
             // [optional]
-            'port' => $db_port,
+            'port' => $db_config->getPort(),
 
         ));
     
