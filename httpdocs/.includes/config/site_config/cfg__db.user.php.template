@@ -1,5 +1,8 @@
 <?php
 
+// Copy this file to cfg__db.user.php in the same directory (site_config) and 
+// fill in your database details.  
+
 return new DatabaseConfig(
                         '', // database host 
                         '', // database username
