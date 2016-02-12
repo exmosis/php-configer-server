@@ -50,21 +50,16 @@ class HostConfig {
         $this->parent_host_id = $host_info['parent_host_id'];
     }
 
-    public function getHostConfig() {
-        
-    }
-
     public function getDomain() {
         return $this->domain;
     }
     
     public function getId() {
-        
+        return $this->id;
     }
     
-    
     public function getParentHostId() {
-        
+        return $this->parent_host_id;
     }
     
     
