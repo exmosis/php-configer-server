@@ -1,2 +1,15 @@
 php_value include_path "/var/www/vhosts/php-configer-server/httpdocs/.includes"
 php_value display_errors 1
+
+# ModRewrite is used to convert 
+#   /my_action/
+# into
+#   /index.php?__configer_web_entry=my_action
+# (which will then run web_entries/my_action.php)
+RewriteEngine on
+RewriteBase /
+
+# MAKE SURE EVERY REQUEST ENDS IN A /
+RewriteRule ^([^\.]+[^/])$ $1/
+
+RewriteRule ^([^/]+)/([^\.]*)$ index.php?__configer_web_entry=$1&url_remnant=$2 [L,QSA]
