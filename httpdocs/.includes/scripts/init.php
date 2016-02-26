@@ -22,3 +22,6 @@ $GLOBALS['php_configer_server_db_config'] =
 $GLOBALS['php_configer_server_db_connection'] = 
                                 new MySqlConnection($GLOBALS['php_configer_server_db_config']);
 
+/** Web handling setup **/
+
+require_once('config/cfg__web.php');
