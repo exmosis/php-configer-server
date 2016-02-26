@@ -62,38 +62,5 @@ class HostConfigManager {
             throw new Exception('Sorry, loading HostConfigs by ID isn\'t supported yet.');
         }
     }
- 
-     /**
-      * Gets the HostConfig object for the given setup if we can, but making sure we do
-      * security checks using access token.
-      * 
-      * Doesn't support ID loading yet, needs a quick translation to domain.
-      * 
-      * @return HostConfig HostConfig class
-      * 
-      * @throws Exception if trying to load by ID, no token set, or token invalid
-      */   
-    /*
-    public function getHostConfigWithToken() {
-        
-        if (is_null($this->target_host_config_domain)) {
-            throw new Exception('Sorry, loading HostConfigs by ID isn\'t supported yet.');
-        } else if (! $this->target_host_config_access_token) {
-            throw new Exception('Sorry, can\'t look a host up without an access token.');
-        }
-
-        try {        
-            $host_config = new HostConfig(
-                                          $this->target_host_config_domain, 
-                                          $this->db_connection,
-                                          $this->target_host_config_access_token
-                                         );
-        } catch (Exception $e) {
-            throw new Exception('Sorry, couldn\'t access host - invalid access token?');            
-        }
-        
-        return $host_config;
-                
-    }
-    */    
+   
 }
