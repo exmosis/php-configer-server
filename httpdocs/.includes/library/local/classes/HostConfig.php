@@ -9,6 +9,7 @@ class HostConfig {
     
     protected $domain = null;
     protected $db_connection = null;
+    protected $config_var_manager = null;
     
     protected $id = null;
     protected $token = null;
@@ -24,9 +25,11 @@ class HostConfig {
      */    
     public function __construct($host_domain, 
                                 MySqlConnection $db_connection,
+                                ConfigVarManager $config_var_manager,
                                 $access_token = null) {
         $this->domain = $host_domain;
         $this->db_connection = $db_connection;
+        $this->config_var_manager = $config_var_manager;
         
         if (is_null($access_token)) {
             $this->fetchHostDetails();
@@ -112,7 +115,21 @@ class HostConfig {
         return $this->parent_host_id;
     }
     
+    /**
+     * Get the config vars related to the host.
+     * 
+     * @throw Exception if object's ID is not set
+     */
+    public function getConfigVars() {
+        $host_config_vars = new HostConfigVars($this->getId(), $this->db_connection, $this->config_var_manager);
+        return $host_config_vars->getConfigVars();  
+    }
     
+    public function getConfigVarsWithinFileInfo(ConfigOutputFileManager $config_output_file_manager) {
+        $host_config_vars = new HostConfigVars($this->getId(), $this->db_connection, $this->config_var_manager);
+        return $host_config_vars->getConfigVarsWithinFileInfo($config_output_file_manager);
+        
+    }
     
 } 
 

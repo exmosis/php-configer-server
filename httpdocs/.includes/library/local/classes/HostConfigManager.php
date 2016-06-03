@@ -10,8 +10,10 @@ class HostConfigManager {
     private $target_host_config_access_token = null;
     private $target_host_config_domain = null;
     
-    /* @var $db_connection MySqlConnection *.
+    /* @var $db_connection MySqlConnection */
     protected $db_connection = null;
+    
+    protected $config_var_manager = null;
     
     /**
      * Constructor to set up a HostConfigManager for loading a HostConfig by either
@@ -21,7 +23,7 @@ class HostConfigManager {
      * @param Mixed $access_token String to force security check when loading, or null to not check
      * @param MySqlConnection $db_connection Database connection to use
      */
-    public function __construct($id_or_domain, $access_token, MySqlConnection $db_connection) {
+    public function __construct($id_or_domain, $access_token, MySqlConnection $db_connection, ConfigVarManager $config_var_manager) {
         
         if (is_int($id_or_domain)) {
             $this->target_host_config_id = (int) $id_or_domain;
@@ -37,6 +39,7 @@ class HostConfigManager {
         $this->target_host_config_access_token = $access_token;
         
         $this->db_connection = $db_connection;
+        $this->config_var_manager = $config_var_manager;
         
     }
 
@@ -55,6 +58,7 @@ class HostConfigManager {
             $host_config = new HostConfig(
                                           $this->target_host_config_domain, 
                                           $this->db_connection,
+                                          $this->config_var_manager,
                                           $this->target_host_config_access_token
                                          );
             return $host_config;
