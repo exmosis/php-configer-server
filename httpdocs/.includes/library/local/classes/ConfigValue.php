@@ -11,11 +11,11 @@ class ConfigValue {
     }
     
     public function getValue() {
-        return $value;
+        return $this->value;
     }
     
     public function getConfigVar() {
-        return $config_var;
+        return $this->config_var;
     }
     
 }
