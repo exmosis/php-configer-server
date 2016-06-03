@@ -94,8 +94,36 @@ class HostConfigVars {
      */
     public function getConfigVarsWithinFileInfo(ConfigOutputFileManager $config_output_file_manager) {
         
-        return $this->config_var_manager->getConfigVarsWithinFileInfo($config_output_file_manager);
+        $nested_config_vars = $this->config_var_manager->getConfigVarsWithinFileInfo($config_output_file_manager);
+        $nested_config_vars = $this->populateConfigVarsWithValues($nested_config_vars);
+        return $nested_config_vars;
         
     }
+    
+    // Traverses a tree of file-based config vars, and adds values based on the ID of the array compared to the IDs of the 
+    // config values we know about.
+    private function populateConfigVarsWithValues($nested_config_vars) {
+        
+        // Assemble list of values by config var ID
+        $config_vals_by_id = array();
+        /* @var $config_var ConfigValue */
+        foreach ($this->config_vars as $config_var) {
+            $config_vals_by_id[$config_var->getConfigVar()->getId()] = $config_var->getValue();
+        }
+        
+        // Cycle through config vars and add value
+        foreach ($nested_config_vars as $file_id => $file_info) {
+            foreach ($file_info['config_vars'] as $var_id => $config_var_info) {
+                if (array_key_exists($var_id, $config_vals_by_id)) {
+                    $nested_config_vars[$file_id]['config_vars'][$var_id]['var_value'] = $config_vals_by_id[$var_id];
+                }
+            }
+        }
+        
+        return $nested_config_vars;
+        
+    }
+    
+    
     
 }
