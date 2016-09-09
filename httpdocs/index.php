@@ -2,6 +2,11 @@
 
 require_once('scripts/init.php');
 
+if (! isset($_GET['__configer_web_entry'])) {
+    echo 'No action found.';
+    exit;
+}
+
 $script = $_GET['__configer_web_entry'];
 unset($_GET['__configer_web_entry']);
 
