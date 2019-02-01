@@ -60,14 +60,14 @@ CREATE TABLE `host_config_values` (
 /*Table structure for table `hosts` */
 
 CREATE TABLE `hosts` (
-  `host_id` int(10) unsigned NOT NULL auto_increment,
+  `host_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `host_domain` varchar(255) NOT NULL,
   `host_token` varchar(255) NOT NULL,
-  `parent_host_id` int(10) unsigned default NULL,
-  PRIMARY KEY  (`host_id`),
+  `parent_host_domain` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`host_id`),
   UNIQUE KEY `host_domain_unique` (`host_domain`),
-  KEY `parent_host_id_fk` (`parent_host_id`),
-  CONSTRAINT `parent_host_id_fk` FOREIGN KEY (`parent_host_id`) REFERENCES `hosts` (`host_id`) ON UPDATE CASCADE
+  KEY `parent_host_id_fk` (`parent_host_domain`),
+  CONSTRAINT `hosts_parent_host_domain_fk` FOREIGN KEY (`parent_host_domain`) REFERENCES `hosts` (`host_domain`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
