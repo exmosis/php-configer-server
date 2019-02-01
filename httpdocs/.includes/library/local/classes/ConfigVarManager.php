@@ -19,6 +19,10 @@ class ConfigVarManager {
        
         $config_vars = array();
        
+        if (empty($config_var_ids)) {
+            return $config_vars;
+        }
+        
         // Make sure they're ints 
         $config_var_ids = array_map('intval', $config_var_ids);
         
