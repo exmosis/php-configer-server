@@ -11,14 +11,16 @@ class HostConfigVars {
     protected $config_var_manager = null;
 
     protected $host_id;
+    protected $parent_host_domain;
     protected $config_vars;
 
     /**
      * @param Int   $id ID of host config var to load from Database
      */
-    public function __construct($host_id, MySqlConnection $db_connection, ConfigVarManager $config_var_manager) {
+    public function __construct($host_id, $parent_host_domain, MySqlConnection $db_connection, ConfigVarManager $config_var_manager) {
         
         $this->setHostId($host_id);
+        $this->parent_host_domain = $parent_host_domain;
         $this->config_vars = array();
         $this->db_connection = $db_connection;
         $this->config_var_manager = $config_var_manager;
@@ -32,6 +34,10 @@ class HostConfigVars {
     
     public function getHostId() {
         return $this->host_id;
+    }
+    
+    public function getParentHostDomain() {
+        return $this->parent_host_domain;
     }
     
     public function getConfigVars() {
