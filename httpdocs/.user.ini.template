@@ -1,0 +1,2 @@
+include_path="/var/www/vhosts/configer-server/httpdocs/.includes"
+display_errors=1
