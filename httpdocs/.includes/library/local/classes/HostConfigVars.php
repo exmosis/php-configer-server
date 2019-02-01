@@ -1,7 +1,10 @@
 <?php
 
 /**
- * Vars and Values for a specific HostConfig
+ * Vars and Values for a specific HostConfig. This class encapsulates the key => values that are associated with a 
+ * particular host domain. It provides functions to get this list out, but also to get this list out in conjunction
+ * with a ConfigOutputFileManager class: in this case, the returned values will be nested to match the layout 
+ * provided by the ConfigOutputFileManager (ie by file > section) 
  */
 class HostConfigVars {
 

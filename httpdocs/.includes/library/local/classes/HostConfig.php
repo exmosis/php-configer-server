@@ -1,7 +1,8 @@
 <?php
 
 /**
- * Object representing a final config setup for a single host.
+ * Object representing a final config setup for a single host - ie the host's particular properties. 
+ * This class encapsulates the HostConfigVars object (which, currently, we instantiate repeatedly).
  */
 class HostConfig {
     
