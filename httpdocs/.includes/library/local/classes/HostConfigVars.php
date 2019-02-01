@@ -109,27 +109,64 @@ class HostConfigVars {
         
     }
     
-    // Traverses a tree of file-based config vars, and adds values based on the ID of the array compared to the IDs of the 
-    // config values we know about.
-    private function populateConfigVarsWithValues($nested_config_vars) {
-        
+    public function getFlatConfigVarsWithValues() {
+   
         // Assemble list of values by config var ID
-        $config_vals_by_id = array();
+        $config_vals_by_id = array();   
+        
+        // Populate with parent domain's values if we have a parent domain
+        $parent_host_domain = $this->getParentHostDomain();
+        if (! is_null($parent_host_domain)) {
+            // Set up a new host config manager and get the config for the parent host domain
+            $parent_host_config_manager = new HostConfigManager($parent_host_domain, null, $GLOBALS['php_configer_server_db_connection'], new ConfigVarManager($GLOBALS['php_configer_server_db_connection']));
+            $parent_host_config = $parent_host_config_manager->getHostConfig();
+            // Now we need to call this function for the parent HostConfig to establish our inherited default values
+            $config_vals_by_id = $parent_host_config->getFlatDefaultConfigVarValues();
+        }
+        
+        // Now set up our own config values, overriding the defaults where we have them 
+        
         /* @var $config_var ConfigValue */
         foreach ($this->config_vars as $config_var) {
             $config_vals_by_id[$config_var->getConfigVar()->getId()] = $config_var->getValue();
         }
         
+        return $config_vals_by_id;
+                
+    }
+    
+    
+    // Traverses a tree of file-based config vars, and adds values based on the ID of the array compared to the IDs of the 
+    // config values we know about.
+    private function populateConfigVarsWithValues($nested_config_vars) {
+        
+        // This gets all the inherited values + our own values
+        $config_vals_by_id = $this->getFlatConfigVarsWithValues();
+
+        // We need to call the parent domain here to get the pre-populated nested config vars
+        $parent_host_domain = $this->getParentHostDomain();
+        if (! is_null($parent_host_domain)) {
+            // Set up a new host config manager and get the config for the parent host domain
+            $config_output_file_manager = new ConfigOutputFileManager($GLOBALS['php_configer_server_db_connection']);
+            $parent_host_config_manager = new HostConfigManager($parent_host_domain, null, $GLOBALS['php_configer_server_db_connection'], new ConfigVarManager($GLOBALS['php_configer_server_db_connection']));
+            $parent_host_config = $parent_host_config_manager->getHostConfig();
+            $nested_config_to_fill = $parent_host_config->getConfigVarsWithinFileInfo($config_output_file_manager);
+        } else {
+            $nested_config_to_fill = $nested_config_vars;
+        }
+                       
+            
         // Cycle through config vars and add value
         foreach ($nested_config_vars as $file_id => $file_info) {
             foreach ($file_info['config_vars'] as $var_id => $config_var_info) {
                 if (array_key_exists($var_id, $config_vals_by_id)) {
-                    $nested_config_vars[$file_id]['config_vars'][$var_id]['var_value'] = $config_vals_by_id[$var_id];
+                    $nested_config_to_fill[$file_id]['config_vars'][$var_id]['var_value'] = $config_vals_by_id[$var_id];
+                    // $nested_config_vars[$file_id]['config_vars'][$var_id]['var_value'] = $config_vals_by_id[$var_id];
                 }
             }
         }
         
-        return $nested_config_vars;
+        return $nested_config_to_fill;
         
     }
     

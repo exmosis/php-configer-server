@@ -132,5 +132,10 @@ class HostConfig {
         
     }
     
+    public function getFlatDefaultConfigVarValues() {
+        $host_config_vars = new HostConfigVars($this->getId(), $this->getParentHostDomain(), $this->db_connection, $this->config_var_manager);
+        return $host_config_vars->getFlatConfigVarsWithValues();
+    }
+    
 } 
 
