@@ -13,7 +13,7 @@ class HostConfig {
     
     protected $id = null;
     protected $token = null;
-    protected $parent_host_id = null;
+    protected $parent_host_domain = null;
     protected $parent_host = null;
 
     /**
@@ -47,7 +47,7 @@ class HostConfig {
                             array(
                                 'host_id',
                                 'host_token',
-                                'parent_host_id'
+                                'parent_host_domain'
                             ),
                             array(
                                 'host_domain' => $this->getDomain()
@@ -79,7 +79,7 @@ class HostConfig {
                             array(
                                 'host_id',
                                 'host_token',
-                                'parent_host_id'
+                                'parent_host_domain'
                             ),
                             array(
                                 'AND' => array(
@@ -100,7 +100,7 @@ class HostConfig {
     private function setFromHostInfo($host_info) {
         $this->id = $host_info['host_id'];
         $this->token = $host_info['host_token'];
-        $this->parent_host_id = $host_info['parent_host_id'];
+        $this->parent_host_domain = $host_info['parent_host_domain'];
     }
 
     public function getDomain() {
@@ -111,8 +111,8 @@ class HostConfig {
         return $this->id;
     }
     
-    public function getParentHostId() {
-        return $this->parent_host_id;
+    public function getParentHostDomain() {
+        return $this->parent_host_domain;
     }
     
     /**
@@ -121,12 +121,12 @@ class HostConfig {
      * @throw Exception if object's ID is not set
      */
     public function getConfigVars() {
-        $host_config_vars = new HostConfigVars($this->getId(), $this->db_connection, $this->config_var_manager);
+        $host_config_vars = new HostConfigVars($this->getId(), $this->getParentHostDomain(), $this->db_connection, $this->config_var_manager);
         return $host_config_vars->getConfigVars();  
     }
     
     public function getConfigVarsWithinFileInfo(ConfigOutputFileManager $config_output_file_manager) {
-        $host_config_vars = new HostConfigVars($this->getId(), $this->db_connection, $this->config_var_manager);
+        $host_config_vars = new HostConfigVars($this->getId(), $this->getParentHostDomain(), $this->db_connection, $this->config_var_manager);
         return $host_config_vars->getConfigVarsWithinFileInfo($config_output_file_manager);
         
     }
